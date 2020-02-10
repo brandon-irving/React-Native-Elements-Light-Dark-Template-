@@ -1,198 +1,103 @@
-import * as WebBrowser from 'expo-web-browser';
-import React from 'react';
-import {
-  Image,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import React from 'react'
+import { ScrollView, StyleSheet, View } from 'react-native'
+import { Header, Button, Text, Card, CheckBox } from 'react-native-elements'
+import ThemeView from '../components/ThemeView'
+import { UseGlobalContext } from '../context/globalContext'
+import { img, list } from '../constants/MockData'
+import { ThemeListItem } from '../components/ThemeListItem'
 
-import { MonoText } from '../components/StyledText';
 
-export default function HomeScreen() {
+export default function HomeScreen(props) {
+  const { setDarkMode, state: {darkMode}} = UseGlobalContext()
   return (
-    <View style={styles.container}>
-      <ScrollView
-        style={styles.container}
-        contentContainerStyle={styles.contentContainer}>
-        <View style={styles.welcomeContainer}>
-          <Image
-            source={
-              __DEV__
-                ? require('../assets/images/robot-dev.png')
-                : require('../assets/images/robot-prod.png')
-            }
-            style={styles.welcomeImage}
-          />
-        </View>
+    <ThemeView>
+      <CheckBox
+  center
+  title='Toggle Theme'
+  iconRight
+  iconType='material'
+  uncheckedIcon='visibility'
+  checkedIcon='visibility-off'
+  checkedColor='black'
+  checked={darkMode}
+  onPress={() => setDarkMode(!darkMode)}
 
-        <View style={styles.getStartedContainer}>
-          <DevelopmentModeNotice />
+/>
+      <ScrollView>
+      <Card
+  title='HELLO WORLD'
+  image={{uri: img}}
 
-          <Text style={styles.getStartedText}>Get started by opening</Text>
-
-          <View
-            style={[styles.codeHighlightContainer, styles.homeScreenFilename]}>
-            <MonoText>screens/HomeScreen.js</MonoText>
-          </View>
-
-          <Text style={styles.getStartedText}>
-            Change this text and your app will automatically reload.
-          </Text>
-        </View>
-
-        <View style={styles.helpContainer}>
-          <TouchableOpacity onPress={handleHelpPress} style={styles.helpLink}>
-            <Text style={styles.helpLinkText}>
-              Help, it didn’t automatically reload!
-            </Text>
-          </TouchableOpacity>
-        </View>
+  >
+  <Text style={{marginBottom: 10}}>
+    The idea with React Native Elements is more about component structure than actual design.
+  </Text>
+  <Button
+    buttonStyle={{width: '100%',borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0}}
+    title='VIEW NOW' />
+</Card>
+<View style={styles.buttonGrid}>
+<View style={styles.buttonRow}>
+     <Button title="Toggle Theme" />
+     <Button title="Toggle Theme" />
+     </View>
+     <View style={styles.buttonRow}>
+     <Button title="Toggle Theme" />
+     <Button title="Toggle Theme" />
+     </View>
+</View>
+<View style={styles.listContainer}>
+  <Text style={styles.ListTitle}>List</Text>
+{
+    list.map((l, i) => (
+      <ThemeListItem
+        key={i}
+        leftAvatar={{ source: { uri: l.avatar_url } }}
+        title={l.name}
+        subtitle={l.subtitle}
+        bottomDivider
+      />
+    ))
+  }
+</View>
+    
       </ScrollView>
-
-      <View style={styles.tabBarInfoContainer}>
-        <Text style={styles.tabBarInfoText}>
-          This is a tab bar. You can edit it in:
-        </Text>
-
-        <View
-          style={[styles.codeHighlightContainer, styles.navigationFilename]}>
-          <MonoText style={styles.codeHighlightText}>
-            navigation/MainTabNavigator.js
-          </MonoText>
-        </View>
-      </View>
-    </View>
-  );
+   
+    </ThemeView>
+  )
 }
 
 HomeScreen.navigationOptions = {
-  header: null,
-};
+  header: <Header
 
-function DevelopmentModeNotice() {
-  if (__DEV__) {
-    const learnMoreButton = (
-      <Text onPress={handleLearnMorePress} style={styles.helpLinkText}>
-        Learn more
-      </Text>
-    );
-
-    return (
-      <Text style={styles.developmentModeText}>
-        Development mode is enabled: your app will be slower but you can use
-        useful development tools. {learnMoreButton}
-      </Text>
-    );
-  } else {
-    return (
-      <Text style={styles.developmentModeText}>
-        You are not in development mode: your app will run at full speed.
-      </Text>
-    );
-  }
-}
-
-function handleLearnMorePress() {
-  WebBrowser.openBrowserAsync(
-    'https://docs.expo.io/versions/latest/workflow/development-mode/'
-  );
-}
-
-function handleHelpPress() {
-  WebBrowser.openBrowserAsync(
-    'https://docs.expo.io/versions/latest/workflow/up-and-running/#cant-see-your-changes'
-  );
+  centerComponent={{ text: 'headerTitle', style:{color: 'white'} }}
+  rightComponent={{
+    icon: 'repeat',
+    containerStyle: {
+      borderRadius: 10,
+    },
+    underlayColor: 'gray',
+  }}
+   />,
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
+  ListTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    textAlign: 'center'
   },
-  developmentModeText: {
-    marginBottom: 20,
-    color: 'rgba(0,0,0,0.4)',
-    fontSize: 14,
-    lineHeight: 19,
-    textAlign: 'center',
+  listContainer:{
+    padding: 10
+  },  
+  buttonRow:{
+    flex:1,
+    flexDirection:'row',
+    justifyContent:'space-evenly',
+},
+  buttonGrid: {
+    marginTop: 20,
+    height: 150
   },
-  contentContainer: {
-    paddingTop: 30,
-  },
-  welcomeContainer: {
-    alignItems: 'center',
-    marginTop: 10,
-    marginBottom: 20,
-  },
-  welcomeImage: {
-    width: 100,
-    height: 80,
-    resizeMode: 'contain',
-    marginTop: 3,
-    marginLeft: -10,
-  },
-  getStartedContainer: {
-    alignItems: 'center',
-    marginHorizontal: 50,
-  },
-  homeScreenFilename: {
-    marginVertical: 7,
-  },
-  codeHighlightText: {
-    color: 'rgba(96,100,109, 0.8)',
-  },
-  codeHighlightContainer: {
-    backgroundColor: 'rgba(0,0,0,0.05)',
-    borderRadius: 3,
-    paddingHorizontal: 4,
-  },
-  getStartedText: {
-    fontSize: 17,
-    color: 'rgba(96,100,109, 1)',
-    lineHeight: 24,
-    textAlign: 'center',
-  },
-  tabBarInfoContainer: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    ...Platform.select({
-      ios: {
-        shadowColor: 'black',
-        shadowOffset: { width: 0, height: -3 },
-        shadowOpacity: 0.1,
-        shadowRadius: 3,
-      },
-      android: {
-        elevation: 20,
-      },
-    }),
-    alignItems: 'center',
-    backgroundColor: '#fbfbfb',
-    paddingVertical: 20,
-  },
-  tabBarInfoText: {
-    fontSize: 17,
-    color: 'rgba(96,100,109, 1)',
-    textAlign: 'center',
-  },
-  navigationFilename: {
-    marginTop: 5,
-  },
-  helpContainer: {
-    marginTop: 15,
-    alignItems: 'center',
-  },
-  helpLink: {
-    paddingVertical: 15,
-  },
-  helpLinkText: {
-    fontSize: 14,
-    color: '#2e78b7',
-  },
-});
+
+})

@@ -1,14 +1,16 @@
-import { AppLoading } from 'expo';
-import { Asset } from 'expo-asset';
-import * as Font from 'expo-font';
-import React, { useState } from 'react';
-import { Platform, StatusBar, StyleSheet, View } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-
-import AppNavigator from './navigation/AppNavigator';
+import { AppLoading } from 'expo'
+import { Asset } from 'expo-asset'
+import * as Font from 'expo-font'
+import React, { useState } from 'react'
+import { Platform, StatusBar, StyleSheet, View } from 'react-native'
+import { Ionicons } from '@expo/vector-icons'
+import { ThemeProvider } from 'react-native-elements'
+import { GlobalContextProvider } from './context/globalContext'
+import ThemedApp from './ThemedApp'
+import { lightTheme } from './constants/ThemeStyles'
 
 export default function App(props) {
-  const [isLoadingComplete, setLoadingComplete] = useState(false);
+  const [isLoadingComplete, setLoadingComplete] = useState(false)
 
   if (!isLoadingComplete && !props.skipLoadingScreen) {
     return (
@@ -17,14 +19,19 @@ export default function App(props) {
         onError={handleLoadingError}
         onFinish={() => handleFinishLoading(setLoadingComplete)}
       />
-    );
+    )
   } else {
+    
     return (
-      <View style={styles.container}>
-        {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-        <AppNavigator />
-      </View>
-    );
+      <GlobalContextProvider>
+        <ThemeProvider theme={lightTheme}>
+          <View style={styles.container}>
+            {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
+            <ThemedApp />
+          </View>
+        </ThemeProvider>
+      </GlobalContextProvider>
+    )
   }
 }
 
@@ -41,22 +48,21 @@ async function loadResourcesAsync() {
       // remove this if you are not using it in your app
       'space-mono': require('./assets/fonts/SpaceMono-Regular.ttf'),
     }),
-  ]);
+  ])
 }
 
 function handleLoadingError(error) {
   // In this case, you might want to report the error to your error reporting
   // service, for example Sentry
-  console.warn(error);
+  console.warn(error)
 }
 
 function handleFinishLoading(setLoadingComplete) {
-  setLoadingComplete(true);
+  setLoadingComplete(true)
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
   },
-});
+})

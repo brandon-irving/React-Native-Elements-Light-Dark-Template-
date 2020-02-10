@@ -1,24 +1,31 @@
-import React from 'react';
-import { Platform } from 'react-native';
-import { createStackNavigator } from 'react-navigation-stack';
-import { createBottomTabNavigator } from 'react-navigation-tabs';
+import React from 'react'
+import { Platform } from 'react-native'
+import { createStackNavigator } from 'react-navigation-stack'
+import { createBottomTabNavigator } from 'react-navigation-tabs'
 
-import TabBarIcon from '../components/TabBarIcon';
-import HomeScreen from '../screens/HomeScreen';
-import LinksScreen from '../screens/LinksScreen';
-import SettingsScreen from '../screens/SettingsScreen';
+import TabBarIcon from '../components/TabBarIcon'
+import LoginScreen from '../screens/LoginScreen'
+import HomeScreen from '../screens/HomeScreen'
+import SettingsScreen from '../screens/SettingsScreen'
+import ThemeBottomNav from '../components/ThemeBottomNav'
+
+const TabBarComponent = props => <ThemeBottomNav {...props} />
 
 const config = Platform.select({
   web: { headerMode: 'screen' },
   default: {},
-});
+})
 
-const HomeStack = createStackNavigator(
-  {
-    Home: HomeScreen,
-  },
-  config
-);
+function handleStackCreation(title, screen){
+  return createStackNavigator(
+    {
+      [title]: screen,
+    },
+    config
+  )
+}
+
+const HomeStack = handleStackCreation('Home', HomeScreen)
 
 HomeStack.navigationOptions = {
   tabBarLabel: 'Home',
@@ -32,48 +39,43 @@ HomeStack.navigationOptions = {
       }
     />
   ),
-};
+}
 
-HomeStack.path = '';
+HomeStack.path = ''
 
-const LinksStack = createStackNavigator(
-  {
-    Links: LinksScreen,
-  },
-  config
-);
+const LoginStack = handleStackCreation('Login', LoginScreen)
 
-LinksStack.navigationOptions = {
-  tabBarLabel: 'Links',
+LoginStack.navigationOptions = {
+  tabBarLabel: 'Login ',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'} />
   ),
-};
+}
 
-LinksStack.path = '';
+LoginStack.path = ''
 
-const SettingsStack = createStackNavigator(
-  {
-    Settings: SettingsScreen,
-  },
-  config
-);
+const SettingsStack = handleStackCreation('Settings', SettingsScreen)
 
 SettingsStack.navigationOptions = {
   tabBarLabel: 'Settings',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-options' : 'md-options'} />
   ),
-};
+}
 
-SettingsStack.path = '';
+SettingsStack.path = ''
 
-const tabNavigator = createBottomTabNavigator({
-  HomeStack,
-  LinksStack,
-  SettingsStack,
-});
+const tabNavigator = createBottomTabNavigator(
+  {
+    LoginStack,
+    HomeStack,
+    SettingsStack,
+  },
+  {
+    tabBarComponent: props => <TabBarComponent {...props} />,
+  }
+)
 
-tabNavigator.path = '';
+tabNavigator.path = ''
 
-export default tabNavigator;
+export default tabNavigator
