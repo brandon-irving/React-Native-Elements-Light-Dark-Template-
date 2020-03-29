@@ -1,5 +1,14 @@
 # React-Native-Elements-Light-Dark-Template-
 
+
+## Install
+
+    $ git clone https://github.com/brandon-irving/React-Native-Elements-Light-Dark-Template-.git
+    $ cd React-Native-Elements-Light-Dark-Template-
+    $ npm install
+
+------
+
 ## Requirements
 
 For development, you need Node.js and Create React Native CLI installed on your environement.
@@ -46,11 +55,5 @@ Also, be sure to have `git` available in your PATH, `npm` might need it.
 npm install -g create-react-native-app
 
 
----
 
-## Install
-
-    $ git clone https://github.com/brandon-irving/React-Native-Elements-Light-Dark-Template-.git
-    $ cd React-Native-Elements-Light-Dark-Template-
-    $ npm install
 
